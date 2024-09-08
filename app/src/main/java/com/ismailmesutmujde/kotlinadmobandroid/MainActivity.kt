@@ -1,6 +1,9 @@
 package com.ismailmesutmujde.kotlinadmobandroid
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
@@ -8,6 +11,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +21,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     lateinit var mAdView : AdView
+
+    private var mInterstitialAd: InterstitialAd? = null
+    private final val TAG = "MainActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,13 +74,42 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Interstitial AD
+
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d(TAG, adError.toString())
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d(TAG, "Ad was loaded.")
+                mInterstitialAd = interstitialAd
+            }
+        })
+
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+        } else {
+            Log.d("TAG", "The interstitial ad wasn't ready yet.")
+        }
+
         // Banner Ad ID
         // ca-app-pub-1565056140361297/3121425384
+
+        // Interstitial Ad ID
+        // ca-app-pub-1565056140361297/6874325375
 
         // Banner Test ID
         // ca-app-pub-3940256099942544/9257395921
 
         // Interstitial Test ID
         // ca-app-pub-3940256099942544/1033173712
+    }
+
+    fun goToSecond(view: View) {
+
+        val intent = Intent(this, MainActivity2::class.java)
+        startActivity(intent)
     }
 }
