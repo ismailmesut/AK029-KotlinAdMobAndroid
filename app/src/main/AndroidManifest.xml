@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinAdMobAndroid"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1565056140361297~8243247361"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
